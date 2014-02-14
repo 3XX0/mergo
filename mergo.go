@@ -36,13 +36,13 @@ func isEmptyValue(v reflect.Value) bool {
 	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
 		return v.Len() == 0
 	case reflect.Bool:
-		return !v.Bool()
+		return false
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return v.Int() == 0
+		return false
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		return v.Uint() == 0
+		return false
 	case reflect.Float32, reflect.Float64:
-		return v.Float() == 0
+		return false
 	case reflect.Interface, reflect.Ptr:
 		return v.IsNil()
 	}
@@ -100,7 +100,7 @@ func deepMerge(dst, src reflect.Value, visited map[uintptr]*visit, depth int) er
 			return err
 		}
 	default:
-		if dst.CanSet() && isEmptyValue(dst) {
+		if dst.CanSet() && !isEmptyValue(src) {
 			dst.Set(src)
 		}
 	}
